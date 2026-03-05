@@ -34,16 +34,31 @@ The app targets Windows 11 and uses native WLAN APIs:
 
 Frequency is read from `WLAN_BSS_ENTRY.ulChCenterFrequency` (kHz), then converted to MHz.
 
-## Root cause fixed
+## Sample output
 
-A previous implementation attempted to read a non-existent `ulFrequency` field from `WLAN_ASSOCIATION_ATTRIBUTES`.
-That structure does not expose frequency, causing invalid values (`0` / `N/A`).
+### Wi-Fi connection
 
-Fix:
+```text
+Network Router Latency Monitor
+===============================
 
-- Corrected `WLAN_ASSOCIATION_ATTRIBUTES` layout
-- Added channel query via `wlan_intf_opcode_channel_number`
-- Added BSS lookup to obtain actual center frequency
+Target Router: 192.168.1.1
+
+[14:22:31] Latency:    5 ms | WIFI | Local IP: 192.168.1.120  | Router: 192.168.1.1 | SSID: HomeNetwork          | Channel:  36 | 5180 MHz | Signal: 91%
+[14:22:32] Latency:    4 ms | WIFI | Local IP: 192.168.1.120  | Router: 192.168.1.1 | SSID: HomeNetwork          | Channel:  36 | 5180 MHz | Signal: 90%
+```
+
+### LAN connection
+
+```text
+Network Router Latency Monitor
+===============================
+
+Target Router: 10.0.0.1
+
+[09:05:11] Latency:    1 ms | LAN  | Local IP: 10.0.0.25      | Router: 10.0.0.1
+[09:05:12] Latency:    1 ms | LAN  | Local IP: 10.0.0.25      | Router: 10.0.0.1
+```
 
 ## Run
 
